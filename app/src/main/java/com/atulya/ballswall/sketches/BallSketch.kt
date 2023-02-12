@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
+import com.atulya.ballswall.sensors.Accelerometer
 import processing.core.PApplet
 import processing.core.PVector
 
@@ -19,6 +20,17 @@ class BallSketch(context: Context): PApplet() {
     }
 
     override fun setup() {
+
+        val listener = object : Accelerometer.Listener {
+            override fun onAccelerated(dx: Float, dy: Float, dz: Float) {
+                Log.d(this.javaClass.toString(), "$dx, $dy, $dz")
+            }
+
+        }
+
+        val accelerometer = Accelerometer(context, listener)
+        accelerometer.register()
+
         location = PVector(displayWidth/2.toFloat(), displayWidth/1.5.toFloat())
         velocity = PVector(10.5f, 2.1f)
         gravity = PVector(0f, 0.98f)
