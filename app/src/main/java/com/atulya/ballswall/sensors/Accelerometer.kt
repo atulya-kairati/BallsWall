@@ -40,11 +40,11 @@ class Accelerometer(context: Context, listener: Listener) {
         }
     }
 
-    public fun register(){
-        sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+    fun register(){
+        sensorManager.registerListener(sensorEventListener, sensor, SensorManager.SENSOR_DELAY_GAME)
     }
 
-    public fun unregister() {
+    fun unregister() {
         sensorManager.unregisterListener(sensorEventListener)
     }
 

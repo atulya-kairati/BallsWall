@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        sketch = BallSketch(applicationContext)
+        sketch = BallSketch()
 
         val pFragment = PFragment(sketch)
 

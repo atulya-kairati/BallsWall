@@ -1,6 +1,5 @@
 package com.atulya.ballswall.sketches
 
-import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -8,32 +7,35 @@ import com.atulya.ballswall.sensors.Accelerometer
 import processing.core.PApplet
 import processing.core.PVector
 
-class BallSketch(context: Context): PApplet() {
+class BallSketch : PApplet() {
+
+    private val TAG = "# BallSketch"
+    private val dampening = 0.9f
 
     private lateinit var location: PVector
     private lateinit var velocity: PVector
     private lateinit var gravity: PVector
 
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun settings(){
+    override fun settings() {
         size(displayWidth, displayHeight)
     }
 
     override fun setup() {
 
+        location = PVector(displayWidth / 2.toFloat(), displayWidth / 1.5.toFloat())
+        velocity = PVector(0f, 0f)
+        gravity = PVector(0f, 0f)
+
         val listener = object : Accelerometer.Listener {
             override fun onAccelerated(dx: Float, dy: Float, dz: Float) {
-                Log.d(this.javaClass.toString(), "$dx, $dy, $dz")
+                gravity.set(-dx / 10, dy / 10)
             }
 
         }
 
         val accelerometer = Accelerometer(context, listener)
         accelerometer.register()
-
-        location = PVector(displayWidth/2.toFloat(), displayWidth/1.5.toFloat())
-        velocity = PVector(10.5f, 2.1f)
-        gravity = PVector(0f, 0.98f)
     }
 
     override fun draw() {
@@ -41,21 +43,34 @@ class BallSketch(context: Context): PApplet() {
         location.add(velocity)
         velocity.add(gravity)
 
-        if ((location.x > width) || (location.x < 0)) {
-            velocity.x = velocity.x * -1
+        when {
+            location.x > width -> {
+                location.x = width.toFloat()
+                velocity.x = velocity.x * -dampening
+            }
+
+            location.x < 0 -> {
+                location.x = 0f
+                velocity.x = velocity.x * -dampening
+            }
+
+            location.y > height -> {
+                location.y = height.toFloat()
+                velocity.y = velocity.y * -dampening
+            }
+
+            location.y < 0 -> {
+                location.y = 0f
+                velocity.y = velocity.y * -dampening
+            }
         }
 
-        if (location.y > height) {
-            // We're reducing velocity ever so slightly
-            // when it hits the bottom of the window
-            velocity.y = velocity.y * -0.95f
-            location.y = height.toFloat()
-        }
+        Log.d(TAG, "draw: $location")
 
         // Display circle at location vector
         stroke(150f, 0f, 0f)
         strokeWeight(2f)
         fill(255f, 0f, 0f)
-        ellipse(location.x,location.y,48f,48f)
+        ellipse(location.x, location.y, 48f, 48f)
     }
 }
