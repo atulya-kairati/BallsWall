@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.atulya.ballswall.sketches.BallSketch
+import com.atulya.ballswall.ballsworld.BallSketch
 import processing.android.CompatUtils
 import processing.android.PFragment
 import processing.core.PApplet
@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
+//        sketch = TestSketch()
         sketch = BallSketch()
 
         val pFragment = PFragment(sketch)
