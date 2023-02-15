@@ -47,7 +47,7 @@ data class BallWrapper(
 
             val gravity = PVector(0f, 0f)
 
-            val dampening = getRandomFloat(0.2f, 1f)
+            val dampening = getRandomFloat(0.5f, 1f)
 
             return BallWrapper(creator, aBall, location, velocity, gravity, dampening)
         }
